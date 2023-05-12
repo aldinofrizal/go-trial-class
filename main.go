@@ -1,12 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"mini-ecommerce/cli"
+	"mini-ecommerce/config"
+)
 
 func main() {
-	fmt.Println("Welcome to mini-ecommerce")
-	initApplication()
-}
-
-func initApplication() {
-	// Start code here
+	config.DBConnect()
+	cli.MainMenu()
 }
