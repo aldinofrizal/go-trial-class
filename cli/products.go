@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"mini-ecommerce/config"
 	"mini-ecommerce/entity"
@@ -12,6 +13,7 @@ import (
 func ListProduct() {
 	helpers.ClearScreen()
 
+	consoleReader := bufio.NewReader(os.Stdin)
 	var products []entity.Product
 	err := config.DB.Find(&products).Error
 
@@ -19,7 +21,7 @@ func ListProduct() {
 		ErrorHandler(err.Error())
 		return
 	}
-	c
+
 	fmt.Println("--- List order ---")
 	for _, product := range products {
 		product.PrintDetail()
@@ -30,15 +32,16 @@ func ListProduct() {
 	fmt.Println("Tekan (m) untuk kembali ke halaman utama")
 	fmt.Println("Tekan (q) untuk keluar dari aplikasi")
 
-	_, err = fmt.Scanln(&input)
-	if err != nil {
-		panic(err.Error())
-	}
+	input, _ = consoleReader.ReadString('\n')
+	// _, err = fmt.Scanln(&input)
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
 
 	switch input {
-	case "m":
+	case "m\n":
 		MainMenu()
-	case "q":
+	case "q\n":
 		fmt.Println("Terima kasih telah menggunakan aplikasi Mini Ecommerce")
 		os.Exit(1)
 	default:
@@ -48,6 +51,8 @@ func ListProduct() {
 
 func OrderProduct(id string) {
 	helpers.ClearScreen()
+
+	consoleReader := bufio.NewReader(os.Stdin)
 
 	var product entity.Product
 	err := config.DB.Where("ID = ?", id).First(&product).Error
@@ -62,18 +67,18 @@ func OrderProduct(id string) {
 	fmt.Println("Tekan (y) untuk melanjutkan order")
 	fmt.Println("Tekan (m) untuk kembali ke halaman utama")
 	fmt.Println("Tekan (q) untuk keluar dari aplikasi")
-
-	_, err = fmt.Scanln(&input)
-	if err != nil {
-		panic(err.Error())
-	}
+	input, _ = consoleReader.ReadString('\n')
+	// _, err = fmt.Scanln(&input)
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
 
 	switch input {
-	case "y":
+	case "y\n":
 		CreateOrder(product)
-	case "m":
+	case "m\n":
 		MainMenu()
-	case "q":
+	case "q\n":
 		fmt.Println("Terima kasih telah menggunakan aplikasi Mini Ecommerce")
 		os.Exit(1)
 	default:
@@ -83,24 +88,26 @@ func OrderProduct(id string) {
 
 func CreateOrder(product entity.Product) {
 	helpers.ClearScreen()
-
+	consoleReader := bufio.NewReader(os.Stdin)
 	var email string
 	var address string
 
 	fmt.Println("untuk melakukan order silahkan melengkapi data berikut")
 	fmt.Println("Masukan email: ")
-	_, err := fmt.Scanln(&email)
-	if err != nil {
-		ErrorHandler(err.Error())
-		return
-	}
+	email, _ = consoleReader.ReadString('\n')
+	// _, err := fmt.Scanln(&email)
+	// if err != nil {
+	// 	ErrorHandler(err.Error())
+	// 	return
+	// }
 
 	fmt.Println("Masukan alamat: ")
-	_, err = fmt.Scanln(&address)
-	if err != nil {
-		ErrorHandler(err.Error())
-		return
-	}
+	address, _ = consoleReader.ReadString('\n')
+	// _, err = fmt.Scanln(&address)
+	// if err != nil {
+	// 	ErrorHandler(err.Error())
+	// 	return
+	// }
 
 	order := entity.Order{
 		ProductId:    int(product.ID),
@@ -109,7 +116,7 @@ func CreateOrder(product entity.Product) {
 		OrderDate:    time.Now(),
 	}
 
-	err = config.DB.Create(&order).Error
+	err := config.DB.Create(&order).Error
 	if err != nil {
 		ErrorHandler(err.Error())
 		return
@@ -122,11 +129,11 @@ func CreateOrder(product entity.Product) {
 
 	_, err = fmt.Scanln(&input)
 	if err != nil {
-		panic(err.Error())
+		MainMenu()
 	}
 
 	switch input {
-	case "q":
+	case "q\n":
 		fmt.Println("Terima kasih telah menggunakan aplikasi Mini Ecommerce")
 		os.Exit(1)
 	default:
