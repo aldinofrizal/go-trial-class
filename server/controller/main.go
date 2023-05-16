@@ -11,6 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get Product
+// @Schemes Product
+// @Description Get list of all available Products
+// @Tags Product
+// @Produce json
+// @Success 200 {array} entity.Product
+// @Router /products [get]
 func GetProductHandler(ctx *gin.Context) {
 	var products []entity.Product
 
@@ -21,12 +28,18 @@ func GetProductHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"message":  "OK",
-		"products": products,
-	})
+	ctx.JSON(http.StatusOK, products)
 }
 
+// @Summary Post Order
+// @Schemes Order
+// @Description Create order to order specific product
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param data body entity.OrderRequest true "Order data"
+// @Success 200 {string} success create order
+// @Router /orders [post]
 func PostOrderHandler(ctx *gin.Context) {
 	var order entity.Order
 
@@ -57,10 +70,17 @@ func PostOrderHandler(ctx *gin.Context) {
 	go helpers.SendMail(order.BuyerEmail, order.BuyerAddress, product.Name)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "success create product",
+		"message": "success create order",
 	})
 }
 
+// @Summary Get Order
+// @Schemes Order
+// @Description Get list of all orders
+// @Tags Order
+// @Produce json
+// @Success 200 {array} entity.Order
+// @Router /orders [get]
 func GetOrderHandler(ctx *gin.Context) {
 	var orders []entity.Order
 
@@ -71,8 +91,5 @@ func GetOrderHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "OK",
-		"orders":  orders,
-	})
+	ctx.JSON(http.StatusOK, orders)
 }
