@@ -19,7 +19,6 @@ func ListProduct() {
 		ErrorHandler(err.Error())
 		return
 	}
-	c
 	fmt.Println("--- List order ---")
 	for _, product := range products {
 		product.PrintDetail()
