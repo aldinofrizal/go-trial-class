@@ -1,11 +1,9 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-)
+// import "github.com/gin-gonic/gin"
 
 func main() {
-	s := gin.Default()
+	// s := gin.Default()
 
-	s.Run(":8000")
+	// s.Run(":8000")
 }
