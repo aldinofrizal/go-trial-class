@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"mini-ecommerce/config"
 	"mini-ecommerce/entity"
@@ -10,6 +11,7 @@ import (
 
 func ListOrder() {
 	helpers.ClearScreen()
+	consoleReader := bufio.NewReader(os.Stdin)
 	var orders []entity.Order
 
 	err := config.DB.Preload("Product").Find(&orders).Error
@@ -27,10 +29,11 @@ func ListOrder() {
 	fmt.Println("Tekan (key apapun) untuk kembali ke halaman utama")
 	fmt.Println("Tekan (q) untuk keluar dari aplikasi")
 
-	_, err = fmt.Scanln(&input)
-	if err != nil {
-		panic(err.Error())
-	}
+	// _, err = fmt.Scanln(&input)
+	input, _ = consoleReader.ReadString('\n')
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
 
 	switch input {
 	case "q":
